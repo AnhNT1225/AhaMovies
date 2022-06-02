@@ -16,9 +16,13 @@ export interface IMovie {
 }
 
 
-export interface IMovieListResponse{
+export interface IMovieListResponse {
     page: number;
     results: IMovie[],
-    total_page: number;
-    total_result: number;
+    total_pages: number;
+    total_results: number;
+    dates?: {
+      maximum: string;
+      minimun: string;
+    }
 }

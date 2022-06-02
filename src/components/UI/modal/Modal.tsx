@@ -11,17 +11,18 @@ interface ModalProps {
 interface ModalContentProps {
   onClose?: () => void;
   children: React.ReactNode;
+  setActive: (value:boolean) => void;
 }
 
 const Modal: React.FC<ModalProps> = (props) => {
-  const [active, setActive] = useState<boolean>(false);
+  
 
-  useEffect(() => {
-    setActive(props.active);
-  }, [props.active]);
+  // useEffect(() => {
+  //   setActive(props.active);
+  // }, [props.active]);
 
   return (
-    <div id={props.id} className={`modal ${active ? "active" : ""}`}>
+    <div id={props.id} className={`modal ${props.active ? "active" : ""}`}>
       {props.children}
     </div>
   );
@@ -31,6 +32,7 @@ export const ModalContent: React.FC<ModalContentProps> = (props) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const closeModal = () => {
+    props.setActive(false)
     contentRef.current?.parentElement?.classList.remove("active");   //should add to parent
     if (props.onClose) props.onClose();
   };

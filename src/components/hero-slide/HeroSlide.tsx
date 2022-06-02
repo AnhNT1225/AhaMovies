@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SwiperCore, { Autoplay } from "swiper";
 // Import Swiper React components
@@ -7,10 +7,38 @@ import apiConfig from "../../api/apiConfig";
 import tmdbApi, { movieType, category } from "../../api/tmdbApi";
 import { IMovie } from "../../interface";
 import Button, { OutlineButton } from "../UI/button/Button";
+import Modal, { ModalContent } from "../UI/modal/Modal";
 import "./hero-slide.scss";
+
+interface TrailerModalProps {
+  item: IMovie;
+}
+
+interface HeroSlideItemProps {
+  item: IMovie;
+  className: string;
+}
+
+const TrailerModal: React.FC<TrailerModalProps> = (props) => {
+  const item = props.item;
+  const [active, setActive] = useState<boolean>(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const onClose = () => iframeRef.current?.setAttribute("src", "");
+
+  return (
+    <Modal active={active} id={`modal_${item.id}`}>
+      <ModalContent onClose={onClose} setActive={setActive}>
+        <iframe ref={iframeRef} width="100%" height="500px" title="trailer" ></iframe>
+      </ModalContent>
+    </Modal>
+  );
+};
+
 const HeroSlide = () => {
   SwiperCore.use([Autoplay]);
   const [movieItems, setMovieItems] = useState<IMovie[]>([]);
+
   useEffect(() => {
     const getMovies = async () => {
       const params = { page: 1 };
@@ -41,20 +69,22 @@ const HeroSlide = () => {
           return (
             <SwiperSlide key={i}>
               {({ isActive }) => (
-                <HeroSlideItem item={item} className={`${isActive ? 'active' : ''}`} />
+                <HeroSlideItem
+                  item={item}
+                  className={`${isActive ? "active" : ""}`}
+                />
               )}
             </SwiperSlide>
           );
         })}
       </Swiper>
+      {movieItems.map((item, i) => (
+        <TrailerModal key={i} item={item} />
+      ))}
     </div>
   );
 };
 
-interface HeroSlideItemProps {
-  item: IMovie;
-  className: string;
-}
 const HeroSlideItem: React.FC<HeroSlideItemProps> = (props) => {
   let navigate = useNavigate();
 
@@ -63,6 +93,21 @@ const HeroSlideItem: React.FC<HeroSlideItemProps> = (props) => {
   const background = apiConfig.originalImage(
     item.backdrop_path ? item.backdrop_path : item.poster_path
   );
+
+  const setModalActive = async () => {
+    const modal = document.querySelector<HTMLDivElement>(`#modal_${item.id}`);
+    const video = await tmdbApi.getVideos(category.movie, item.id);
+    // console.log('modal?.querySelector(".modal__content") ', modal?.querySelector(".modal__content"));
+    console.log("video, ", video);
+    if (video.results.length > 0) {
+      const videoSrc = "https://www.youtube.com/embed/" + video.results[0].key;
+      modal
+        ?.querySelector(".modal__content > iframe")
+        ?.setAttribute("src", videoSrc);
+    } 
+
+    modal?.classList.toggle("active");
+  };
 
   return (
     <div
@@ -74,10 +119,10 @@ const HeroSlideItem: React.FC<HeroSlideItemProps> = (props) => {
           <h2 className="title">{item.title}</h2>
           <div className="overview">{item.overview}</div>
           <div className="btns">
-            <Button onClick={()=> navigate(`/movie/${item.id}`)}>
+            <Button onClick={() => navigate(`/movie/${item.id}`)}>
               Watch now
             </Button>
-            <OutlineButton onClick={() => console.log('trailer')}>
+            <OutlineButton onClick={setModalActive}>
               Watch trailer
             </OutlineButton>
           </div>
@@ -89,4 +134,5 @@ const HeroSlideItem: React.FC<HeroSlideItemProps> = (props) => {
     </div>
   );
 };
+
 export default HeroSlide;
