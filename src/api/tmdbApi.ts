@@ -1,6 +1,7 @@
-import {  IMovieListResponse } from "../interface";
+import {  IMovieDetail, IMovieListResponse } from "../interface";
+import { ICredit } from "../interface/credit";
 import { ISmiliarListResponse } from "../interface/similar";
-import { ITiviListResponse } from "../interface/tivi";
+import { ITiviDetail, ITiviListResponse } from "../interface/tivi";
 import { IVideoResponse } from "../interface/videos";
 import axiosClient from "./axiosClient";
 
@@ -38,15 +39,15 @@ const tmdbApi = {
     const url = category[cate] + "/" + id + "/videos";
     return axiosClient.get(url, { params: {} });
   },
-  search: (cate: string, params: any) => {
+  search: (cate: string, params: any) : Promise<IMovieListResponse | ITiviListResponse> => {
     const url = "search/" + category[cate];
     return axiosClient.get(url, params);
   },
-  detail: (cate: string, id: string, params: any) => {
+  detail: (cate: string, id: string, params: any) : Promise<IMovieDetail | ITiviDetail>=> {
     const url = category[cate] + "/" + id;
     return axiosClient.get(url, params);
   },
-  credits: (cate: string, id: string) => {
+  credits: (cate: string, id: number) : Promise<ICredit> => {
     const url = category[cate] + "/" + id + "credits";
     return axiosClient.get(url, { params: {} });
   },

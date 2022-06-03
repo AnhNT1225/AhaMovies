@@ -1,12 +1,12 @@
 import React from 'react';
 
 import './button.scss'
-interface IButtonProps {
+interface ButtonProps {
     className?: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     children: React.ReactNode;
 }
-const Button : React.FC<IButtonProps> = (props) => {
+const Button : React.FC<ButtonProps> = (props) => {
     return (
         <button className={`btn ${props.className}`} onClick={props.onClick}>
             {props.children}
@@ -15,7 +15,7 @@ const Button : React.FC<IButtonProps> = (props) => {
 };
 
 
-export const OutlineButton : React.FC<IButtonProps> = (props) => {
+export const OutlineButton : React.FC<ButtonProps> = (props) => {
     return (
         <Button className={`btn-outline ${props.className}`} onClick={props.onClick}>
             {props.children}
