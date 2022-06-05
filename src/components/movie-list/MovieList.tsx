@@ -3,18 +3,19 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import tmdbApi, { category } from "../../api/tmdbApi";
 import apiConfig from "../../api/apiConfig";
-import { IGeneralItem, IMovie, ISmiliar, ITivi } from "../../interface";
+import { IGeneralItem, IMovie, ISmiliar, ITivi} from "../../interface";
 
 import "./movie-list.scss";
 import MovieCard from "../movie-card/MovieCard";
 interface MovieListProps {
   category: string;
   type: string;
-  //   id: number;
+    id?: number;
 }
 const MovieList: React.FC<MovieListProps> = (props) => {
-  const [items, setItems] = useState<IGeneralItem[]>([]);
+  const [items, setItems] = useState<IMovie[] | ITivi[] | ISmiliar[]>([]);
 
+  console.log('props category: ', props.category)
   useEffect(() => {
     const getList = async () => {
       let response = null;
@@ -30,9 +31,9 @@ const MovieList: React.FC<MovieListProps> = (props) => {
             break;
         }
       }
-      //   else {
-      //     response = await tmdbApi.similar(props.category, props.id);
-      //   }
+        else {
+          response = await tmdbApi.similar(props.category, props?.id!);
+        }
       setItems(response?.results!);
     };
     getList();

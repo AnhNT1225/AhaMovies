@@ -13,7 +13,7 @@ interface MovieCardProps {
 }
 const MovieCard : React.FC<MovieCardProps> = (props) => {
     const item = props.item;
-
+    console.log(' this cate: ', props.category)
     const link = '/' + category[props.category] + '/' + item.id;
 
     const bg = apiConfig.w500Image(item.poster_path || item.backdrop_path);

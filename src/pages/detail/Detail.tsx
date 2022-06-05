@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import apiConfig from "../../api/apiConfig";
 import tmdbApi, { category } from "../../api/tmdbApi";
+import MovieList from "../../components/movie-list/MovieList";
 import { IMovieDetail, ITiviDetail } from "../../interface";
 import CastList from "./CastList";
 import "./detail.scss";
+import VideoList from "./VideoList";
 
 const Detail = () => {
   const { category, id } = useParams();
@@ -63,6 +65,17 @@ const Detail = () => {
                 {/* Casts list */}
                 <CastList id={item.id} />
               </div>
+            </div>
+          </div>
+          <div className="container">
+            <div className="section mb-3">
+              <VideoList id={item.id}/>
+            </div>
+            <div className="section mb-3">
+              <div className="section__header mb-2">
+                <h2>Similar</h2>
+              </div>
+              <MovieList category={category!} type='smilar' id={item.id} />
             </div>
           </div>
         </>

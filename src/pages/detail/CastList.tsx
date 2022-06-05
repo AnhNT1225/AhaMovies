@@ -16,7 +16,7 @@ const CastList : React.FC<CastListProps> = (props) => {
   useEffect(() => {
     const getCredits = async () => {
       const res = await tmdbApi.credits(category!, props.id);
-      setCasts(res.cast.slice(0, 5)!);
+      setCasts(res?.cast.slice(0, 5)!);
     };
 
     getCredits();
