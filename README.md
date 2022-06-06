@@ -1,7 +1,5 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+# Getting Started 
+This movie website was developed by Reactjs with responsive design.
 ## Available Scripts
 
 In the project directory, you can run:
