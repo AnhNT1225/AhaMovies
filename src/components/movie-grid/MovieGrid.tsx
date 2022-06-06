@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import tmdbApi, { category, movieType, tvType } from "../../api/tmdbApi";
-import { IGeneralItem } from "../../interface";
+import { IGeneralItem, IMovie, ITivi } from "../../interface";
 import MovieCard from "../movie-card/MovieCard";
 import MovieSearch from "../movie-search/MovieSearch";
 import { OutlineButton } from "../UI/button/Button";
@@ -12,7 +12,7 @@ interface MovieGridProps {
   category: string;
 }
 const MovieGrid: React.FC<MovieGridProps> = (props) => {
-  const [items, setItems] = useState<IGeneralItem[]>([]);
+  const [items, setItems] = useState<IMovie[] | ITivi[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(0);
 
@@ -45,9 +45,8 @@ const MovieGrid: React.FC<MovieGridProps> = (props) => {
     getList();
   }, [props.category, keyword]);
 
-
-  const loadmore = async() => {
-    let response : any = null;
+  const loadmore = async () => {
+    let response: any = null;
 
     if (keyword === undefined) {
       const params = {
@@ -75,9 +74,9 @@ const MovieGrid: React.FC<MovieGridProps> = (props) => {
   };
   return (
     <>
-    <div className="section mb-3">
-      <MovieSearch category={props.category} keyword={keyword!}/>
-    </div>
+      <div className="section mb-3">
+        <MovieSearch category={props.category} keyword={keyword!} />
+      </div>
       <div className="movie-grid">
         {items.map((item, i) => (
           <MovieCard category={props.category} item={item} key={i} />
