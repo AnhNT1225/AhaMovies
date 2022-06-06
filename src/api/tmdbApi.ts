@@ -3,6 +3,7 @@ import { ICredit } from "../interface/credit";
 import { ISmiliarListResponse } from "../interface/similar";
 import { ITiviDetail, ITiviListResponse } from "../interface/tivi";
 import { IVideoResponse } from "../interface/videos";
+import { IWatchResponse } from "../interface/watch";
 import axiosClient from "./axiosClient";
 
 // interface IMovieType {
@@ -39,6 +40,10 @@ const tmdbApi = {
     const url = category[cate] + "/" + id + "/videos";
     return axiosClient.get(url, { params: {} });
   },
+  // getWatch: (cate: string, id: number): Promise<IWatchResponse> => {
+  //   const url = category[cate] + "/" + id + "/watch/providers";
+  //   return axiosClient.get(url, { params: {} });
+  // },
   search: (cate: string, params: any) : Promise<IMovieListResponse | ITiviListResponse> => {
     const url = "search/" + category[cate];
     return axiosClient.get(url, params);
